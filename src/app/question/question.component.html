@@ -1,0 +1,9 @@
+<div class="d-inline-flex align-items-baseline">
+    <p>{{leftNum}} x {{rightNum}} = </p> 
+    <input type="text" 
+           [(ngModel)]="inputAnswer" 
+           class="form-control question-input"
+           inputmode="numeric"
+           pattern="[0-9]*"
+           digitOnly/>
+</div>
