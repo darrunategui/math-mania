@@ -1,23 +1,22 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
+import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { QuestionComponent } from './question/question.component';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { DigitOnlyModule } from '@uiowa/digit-only';
+import { LevelChooserComponent } from './level-chooser/level-chooser.component';
+import { SharedModule } from './shared/shared.module';
+
 
 @NgModule({
   declarations: [
     AppComponent,
-    QuestionComponent
+    QuestionComponent,
+    LevelChooserComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    ReactiveFormsModule,
-    FormsModule,
-    DigitOnlyModule
+    SharedModule
   ],
   providers: [],
   bootstrap: [AppComponent]
