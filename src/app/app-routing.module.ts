@@ -1,7 +1,9 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { AppComponent } from './app.component';
+import { RouterModule, Routes } from '@angular/router';
+import { GameComponent } from './game/game.component';
 import { LevelChooserComponent } from './level-chooser/level-chooser.component';
+import { DifficultyLevels } from './model/difficulty-levels.enum';
+import { GameData } from './model';
 
 
 const routes: Routes = [
@@ -9,6 +11,11 @@ const routes: Routes = [
     path: '',
     component: LevelChooserComponent,
     pathMatch: 'full'
+  },
+  {
+    path: 'game/easy',
+    component: GameComponent,
+    data: <GameData>{ difficulty: DifficultyLevels.Easy }
   },
   {
     path: '**',

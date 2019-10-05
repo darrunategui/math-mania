@@ -31,6 +31,7 @@ export class QuestionComponent implements OnInit {
     this.randomize();
   }
 
+  // TODO: move logic to a nother component or service. This component should really only be for presentation
   randomize() {
     // todo: begin timer
     this._inputAnswer = null;

@@ -5,13 +5,17 @@ import { AppComponent } from './app.component';
 import { QuestionComponent } from './question/question.component';
 import { LevelChooserComponent } from './level-chooser/level-chooser.component';
 import { SharedModule } from './shared/shared.module';
+import { GameComponent } from './game/game.component';
+import { CountDownComponent } from './count-down/count-down.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     QuestionComponent,
-    LevelChooserComponent
+    LevelChooserComponent,
+    GameComponent,
+    CountDownComponent
   ],
   imports: [
     BrowserModule,
