@@ -1,4 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Subject, Scheduler, asapScheduler } from 'rxjs';
+import { subscribeOn } from 'rxjs/operators';
+import { ArithmeticOperations } from '../model';
 
 @Component({
   selector: 'math-question',
@@ -7,42 +10,39 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 })
 export class QuestionComponent implements OnInit {
 
-  @Input() min: number = 1;
-  @Input() max: number = 12;
+  @Input() leftOperand: number;
+  @Input() rightOperand: number;
+  @Input() operation: ArithmeticOperations;
+  @Input() correctAnswer: number;
   @Output() questionAnswered = new EventEmitter<void>();
 
-  leftNum: number;
-  rightNum: number;
-  private _correctAnswer: number;
-  private _inputAnswer: number;
+  private questionAnswered$ = new Subject<void>();
 
   get inputAnswer() { return this._inputAnswer; }
-  set inputAnswer(value: number) { 
+  set inputAnswer(value: number) {
     this._inputAnswer = value;
-    if (this._inputAnswer && this._correctAnswer && this._inputAnswer == this._correctAnswer) {
-      //todo: emit how long it took
-      this.questionAnswered.emit();
+    if (this._inputAnswer && this.correctAnswer && this._inputAnswer == this.correctAnswer) {
+      this.questionAnswered$.next();
     }
-   }
-
-  constructor() { }
+  }
+  private _inputAnswer: number;
 
   ngOnInit() {
-    this.randomize();
+    // Since the event emitter is going to be triggered in the setter of inputAnswer,
+    // and this subsequently can trigger another setting on inputAnswer
+    // it's best to execute the event on an asap scheduler to give the inputAnswer setter
+    // the ability to finish executing
+    this.questionAnswered$.pipe(subscribeOn(asapScheduler)).subscribe(() => {
+      this.questionAnswered.emit();
+    });
   }
 
-  // TODO: move logic to a nother component or service. This component should really only be for presentation
-  randomize() {
-    // todo: begin timer
-    this._inputAnswer = null;
-    this.leftNum = this.getRandomNumberWithinRange();
-    this.rightNum = this.getRandomNumberWithinRange();
-    this._correctAnswer = this.leftNum * this.rightNum;
-  }
-
-  private getRandomNumberWithinRange() {
-      const min = Math.ceil(this.min);
-      const max = Math.floor(this.max);
-      return Math.floor(Math.random() * (max - min + 1)) + min;
+  get operationSymbol() {
+    switch(this.operation) {
+      case ArithmeticOperations.Multiplication: return 'x';
+      case ArithmeticOperations.Subtraction: return '-';
+      case ArithmeticOperations.Addition: return '+';
+      default: return '?';
+    }
   }
 }

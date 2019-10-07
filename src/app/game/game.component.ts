@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRouteSnapshot, ActivatedRoute } from '@angular/router';
-import { GameData } from '../model';
+import { GameData, ArithmeticOperations } from '../model';
+import { GameService } from './game.service';
 
 @Component({
   selector: 'math-game',
@@ -11,7 +12,12 @@ export class GameComponent implements OnInit {
 
   gameData: GameData;
 
-  constructor(private route: ActivatedRoute) { }
+  leftOperand: number;
+  rightOperand: number;
+  operation: ArithmeticOperations;
+  correctAnswer: number;
+
+  constructor(private route: ActivatedRoute, private gameService: GameService) { }
 
   ngOnInit() {
     this.gameData = this.route.snapshot.data as GameData;

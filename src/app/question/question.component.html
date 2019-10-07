@@ -1,5 +1,10 @@
 <div class="d-inline-flex align-items-baseline">
-    <p>{{leftNum}} x {{rightNum}} = </p> 
+    <p>
+        <span>{{leftOperand}}</span>
+        <span>{{operationSymbol}}</span>
+        <span>{{rightOperand}}</span>
+        <span>=</span>
+    </p> 
     <input type="text" 
            [(ngModel)]="inputAnswer" 
            class="form-control question-input"
