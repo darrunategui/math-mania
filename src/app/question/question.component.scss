@@ -1,3 +1,10 @@
-.question-input {
- width: 10em;
+.question {
+    &-container {
+        display: inline-flex;
+        align-items: baseline;
+    }
+
+    &-input {
+        width: 10em;
+    }
 }

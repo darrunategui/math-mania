@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRouteSnapshot, ActivatedRoute } from '@angular/router';
-import { GameData, ArithmeticOperations } from '../model';
+import { ActivatedRoute } from '@angular/router';
+import { ArithmeticOperations, GameData, MathQuestion } from '../model';
 import { GameService } from './game.service';
 
 @Component({
@@ -11,11 +11,7 @@ import { GameService } from './game.service';
 export class GameComponent implements OnInit {
 
   gameData: GameData;
-
-  leftOperand: number;
-  rightOperand: number;
-  operation: ArithmeticOperations;
-  correctAnswer: number;
+  question: MathQuestion;
 
   constructor(private route: ActivatedRoute, private gameService: GameService) { }
 
@@ -23,4 +19,15 @@ export class GameComponent implements OnInit {
     this.gameData = this.route.snapshot.data as GameData;
   }
 
+  startGame() {
+    this.generateQuestion();
+  }
+
+  questionAnswered() {
+    this.generateQuestion();
+  }
+
+  generateQuestion() {
+    this.question = this.gameService.getRandomQuestion(this.gameData.difficulty, ArithmeticOperations.Multiplication);
+  }
 }

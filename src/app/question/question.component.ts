@@ -1,7 +1,7 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Subject, Scheduler, asapScheduler } from 'rxjs';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { asapScheduler, Subject } from 'rxjs';
 import { subscribeOn } from 'rxjs/operators';
-import { ArithmeticOperations } from '../model';
+import { ArithmeticOperations, MathQuestion } from '../model';
 
 @Component({
   selector: 'math-question',
@@ -10,26 +10,30 @@ import { ArithmeticOperations } from '../model';
 })
 export class QuestionComponent implements OnInit {
 
-  @Input() leftOperand: number;
-  @Input() rightOperand: number;
-  @Input() operation: ArithmeticOperations;
-  @Input() correctAnswer: number;
   @Output() questionAnswered = new EventEmitter<void>();
 
-  private questionAnswered$ = new Subject<void>();
+  @Input()
+  get question() { return this._question; }
+  set question(value: MathQuestion) {
+    this._question = value;
+    this.inputAnswer = null;
+  }
+  private _question: MathQuestion;
 
   get inputAnswer() { return this._inputAnswer; }
   set inputAnswer(value: number) {
     this._inputAnswer = value;
-    if (this._inputAnswer && this.correctAnswer && this._inputAnswer == this.correctAnswer) {
+    if (this._inputAnswer && this.question && this._inputAnswer == this.question.answer) {
       this.questionAnswered$.next();
     }
   }
   private _inputAnswer: number;
 
+  private questionAnswered$ = new Subject<void>();
+
   ngOnInit() {
     // Since the event emitter is going to be triggered in the setter of inputAnswer,
-    // and this subsequently can trigger another setting on inputAnswer
+    // and this subsequently can trigger another setting on inputAnswer (clearing it)
     // it's best to execute the event on an asap scheduler to give the inputAnswer setter
     // the ability to finish executing
     this.questionAnswered$.pipe(subscribeOn(asapScheduler)).subscribe(() => {
@@ -38,7 +42,7 @@ export class QuestionComponent implements OnInit {
   }
 
   get operationSymbol() {
-    switch(this.operation) {
+    switch(this.question && this.question.operation) {
       case ArithmeticOperations.Multiplication: return 'x';
       case ArithmeticOperations.Subtraction: return '-';
       case ArithmeticOperations.Addition: return '+';

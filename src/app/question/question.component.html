@@ -1,8 +1,8 @@
-<div class="d-inline-flex align-items-baseline">
+<div class="question-container" *ngIf="question">
     <p>
-        <span>{{leftOperand}}</span>
+        <span>{{question.leftOperand}}</span>
         <span>{{operationSymbol}}</span>
-        <span>{{rightOperand}}</span>
+        <span>{{question.rightOperand}}</span>
         <span>=</span>
     </p> 
     <input type="text" 

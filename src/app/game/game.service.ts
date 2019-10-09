@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { DifficultyLevels, ArithmeticOperations, DifficultyLevelConstraint } from '../model';
+import { ArithmeticOperations, DifficultyLevelConstraint, DifficultyLevels, MathQuestion } from '../model';
 
 @Injectable({
     providedIn: 'root'
@@ -37,22 +37,17 @@ export class GameService {
         ]
     ]);
 
-    //private readonly operations = Object.values(ArithmeticOperations) as ArithmeticOperations[];
+    getRandomQuestion(difficulty: DifficultyLevels, operation?: ArithmeticOperations) {
+        const difficultyLevelConstraints = this.difficultyLevels.get(difficulty);
+        const allowedOperations = difficultyLevelConstraints.keys;
+        const chosenOperation = operation != null ? operation : allowedOperations[Math.floor(Math.random() * allowedOperations.length)];
+        const constraint = difficultyLevelConstraints.get(chosenOperation);
 
-    getRandomLeftOperand(difficulty: DifficultyLevels, operation?: ArithmeticOperations) {
-        const data = this.getConstraint(difficulty, operation);
-        return this.getRandomNumber(data.leftOperandMin, data.leftOperandMax);
-    }
-
-    getRandomRightOperand(difficulty: DifficultyLevels, operation?: ArithmeticOperations) {
-        const data = this.getConstraint(difficulty, operation);
-        return this.getRandomNumber(data.rightOperandMin, data.rightOperandMax);
-    }
-
-    private getConstraint(difficulty: DifficultyLevels, operation?: ArithmeticOperations) {
-        const operations = this.difficultyLevels.get(difficulty);
-        const allowedOperations = operations.keys;
-        return operations.get(operation != null ? operation : allowedOperations[Math.floor(Math.random() * allowedOperations.length)]);
+        let question = new MathQuestion();
+        question.leftOperand = this.getRandomNumber(constraint.leftOperandMin, constraint.leftOperandMax);
+        question.rightOperand = this.getRandomNumber(constraint.rightOperandMin, constraint.rightOperandMax);
+        question.operation = chosenOperation;
+        return question;
     }
     private getRandomNumber(min: number, max: number) {
         return Math.floor(Math.random() * (max - min + 1)) + min;        
