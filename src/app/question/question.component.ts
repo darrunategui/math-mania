@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { asapScheduler, Subject } from 'rxjs';
-import { subscribeOn } from 'rxjs/operators';
+import { asapScheduler, Subject, asyncScheduler, animationFrameScheduler } from 'rxjs';
+import { subscribeOn, observeOn } from 'rxjs/operators';
 import { ArithmeticOperations, MathQuestion } from '../model';
 
 @Component({
@@ -36,7 +36,7 @@ export class QuestionComponent implements OnInit {
     // and this subsequently can trigger another setting on inputAnswer (clearing it)
     // it's best to execute the event on an asap scheduler to give the inputAnswer setter
     // the ability to finish executing
-    this.questionAnswered$.pipe(subscribeOn(asapScheduler)).subscribe(() => {
+    this.questionAnswered$.pipe(observeOn(animationFrameScheduler)).subscribe(() => {
       this.questionAnswered.emit();
     });
   }

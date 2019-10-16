@@ -1,14 +1,14 @@
 <div class="question-container" *ngIf="question">
-    <p>
-        <span>{{question.leftOperand}}</span>
-        <span>{{operationSymbol}}</span>
-        <span>{{question.rightOperand}}</span>
-        <span>=</span>
-    </p> 
-    <input type="text" 
-           [(ngModel)]="inputAnswer" 
-           class="form-control question-input"
-           inputmode="numeric"
-           pattern="[0-9]*"
-           digitOnly/>
+  <p>
+    <span>{{question.leftOperand}}</span>
+    <span>{{operationSymbol}}</span>
+    <span>{{question.rightOperand}}</span>
+    <span>=</span>
+  </p>
+  <input type="text"
+         [(ngModel)]="inputAnswer"
+         class="form-control question-input"
+         inputmode="numeric"
+         pattern="[0-9]*"
+         digitOnly />
 </div>
