@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { DigitOnlyModule } from '@uiowa/digit-only';
 import { RouterModule } from '@angular/router';
+import { StopwatchPipe } from './pipes/stopwatch.pipe';
 
 
 
 @NgModule({
-  declarations: [],
+  declarations: [StopwatchPipe],
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -20,7 +21,8 @@ import { RouterModule } from '@angular/router';
     ReactiveFormsModule,
     FormsModule,
     DigitOnlyModule,
-    RouterModule
+    RouterModule,
+    StopwatchPipe
   ]
 })
 export class SharedModule { }
