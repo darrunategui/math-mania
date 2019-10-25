@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ArithmeticOperations, GameData, MathQuestion } from '../model';
 import { GameService } from './game.service';
 import { timer, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'math-game',
@@ -17,40 +17,52 @@ export class GameComponent implements OnInit {
   questionQueue: MathQuestion[] = [];
 
   ellapsedMillis: number;
-  private startMillis: number;
-  private countUpCancelled$ = new Subject<void>();
-
   showCountDown = true;
   showCountUp = false;
 
-  constructor(private route: ActivatedRoute, private gameService: GameService) { }
+  private startMillis: number;
+  private countUpCancelled$ = new Subject<void>();
+
+
+
+  constructor(private route: ActivatedRoute, private gameService: GameService) {
+  }
 
   ngOnInit() {
     this.gameData = this.route.snapshot.data as GameData;
-    this.questionQueue = Array(5).fill(null).map(() => this.gameService.getRandomQuestion(this.gameData.difficulty, ArithmeticOperations.Multiplication));
   }
 
   startGame() {
+    this.questionQueue = Array(5).fill(null).map(() => this.gameService.getRandomQuestion(this.gameData.difficulty, ArithmeticOperations.Multiplication));
+    // show the proper counter
     this.showCountDown = false;
     this.showCountUp = true;
+    // start the game
     this.generateQuestion();
     this.startMillis = Date.now();
     this.recordEllapsedMillis();
-    timer(0, 30).pipe(takeUntil(this.countUpCancelled$)).subscribe(() => this.recordEllapsedMillis());
+
+    // every 33ms record the ellapsed time
+    // 33ms since that still looks like it's real time in the UI
+    timer(0, 33)
+      .pipe(
+        takeUntil(this.countUpCancelled$),
+        finalize(() => this.recordEllapsedMillis())
+    ).subscribe(() => this.recordEllapsedMillis());
   }
 
   questionAnswered() {
     if (this.questionQueue.length == 0) {
       // finished the game!
       this.countUpCancelled$.next();
-      this.recordEllapsedMillis();
     }
     else {
+      // game is not done, generate another question
       this.generateQuestion();
     }
   }
 
-  generateQuestion() {
+  private generateQuestion() {
     this.question = this.questionQueue.shift();
   }
 

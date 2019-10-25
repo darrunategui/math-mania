@@ -19,7 +19,7 @@ export class CountDownComponent implements OnInit {
   ngOnInit() {
     this.countDown$ = merge(
       of(this.countFrom),
-      interval(1200).pipe(
+      interval(1000).pipe(
         take(this.countFrom),
         map(x => this.countFrom - x - 1)
       )

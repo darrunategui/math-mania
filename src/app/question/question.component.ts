@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { asapScheduler, Subject, asyncScheduler, animationFrameScheduler } from 'rxjs';
 import { subscribeOn, observeOn } from 'rxjs/operators';
 import { ArithmeticOperations, MathQuestion } from '../model';
@@ -8,7 +8,9 @@ import { ArithmeticOperations, MathQuestion } from '../model';
   templateUrl: './question.component.html',
   styleUrls: ['./question.component.scss']
 })
-export class QuestionComponent implements OnInit {
+export class QuestionComponent implements OnInit, AfterViewInit {
+
+  @ViewChild('answerInput', { static: false }) inputBox !: ElementRef;
 
   @Output() questionAnswered = new EventEmitter<void>();
 
@@ -18,12 +20,12 @@ export class QuestionComponent implements OnInit {
     this._question = value;
     this.inputAnswer = null;
   }
-  private _question: MathQuestion;
+  private _question: MathQuestion = { leftOperand: NaN, rightOperand: NaN, operation: ArithmeticOperations.None, answer: NaN };
 
   get inputAnswer() { return this._inputAnswer; }
   set inputAnswer(value: number) {
     this._inputAnswer = value;
-    if (this._inputAnswer && this.question && this._inputAnswer == this.question.answer) {
+    if (this._inputAnswer == this.question.answer) {
       this.questionAnswered$.next();
     }
   }
@@ -39,6 +41,10 @@ export class QuestionComponent implements OnInit {
     this.questionAnswered$.pipe(observeOn(animationFrameScheduler)).subscribe(() => {
       this.questionAnswered.emit();
     });
+  }
+
+  ngAfterViewInit(): void {
+    this.inputBox.nativeElement.focus();
   }
 
   get operationSymbol() {

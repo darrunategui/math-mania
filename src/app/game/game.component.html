@@ -5,7 +5,8 @@
 <p *ngIf="showCountUp">
   {{ellapsedMillis | stopwatch}}
 </p>
-<math-question [question]="question"
+<math-question *ngIf="question"
+               [question]="question"
                (questionAnswered)="questionAnswered()">
 </math-question>
 

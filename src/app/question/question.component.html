@@ -1,4 +1,4 @@
-<div class="question-container" *ngIf="question">
+<div class="question-container">
   <p>
     <span>{{question.leftOperand}}</span>
     <span>{{operationSymbol}}</span>
@@ -10,5 +10,6 @@
          class="form-control question-input"
          inputmode="numeric"
          pattern="[0-9]*"
-         digitOnly />
+         digitOnly
+         #answerInput/>
 </div>
