@@ -33,7 +33,7 @@ export class GameComponent implements OnInit {
   }
 
   startGame() {
-    this.questionQueue = Array(5).fill(null).map(() => this.gameService.getRandomQuestion(this.gameData.difficulty, ArithmeticOperations.Multiplication));
+    this.questionQueue = Array(20).fill(null).map(() => this.gameService.getRandomQuestion(this.gameData.difficulty, ArithmeticOperations.Multiplication));
     // show the proper counter
     this.showCountDown = false;
     this.showCountUp = true;

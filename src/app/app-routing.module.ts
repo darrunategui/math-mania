@@ -18,6 +18,21 @@ const routes: Routes = [
     data: <GameData>{ difficulty: DifficultyLevels.Easy }
   },
   {
+    path: 'game/medium',
+    component: GameComponent,
+    data: <GameData>{ difficulty: DifficultyLevels.Medium }
+  },
+  {
+    path: 'game/hard',
+    component: GameComponent,
+    data: <GameData>{ difficulty: DifficultyLevels.Hard }
+  },
+  {
+    path: 'game/impossible',
+    component: GameComponent,
+    data: <GameData>{ difficulty: DifficultyLevels.Impossible }
+  },
+  {
     path: '**',
     redirectTo: ''
   }

@@ -39,8 +39,8 @@ export class GameService {
 
     getRandomQuestion(difficulty: DifficultyLevels, operation?: ArithmeticOperations) {
         const difficultyLevelConstraints = this.difficultyLevels.get(difficulty);
-        const allowedOperations = difficultyLevelConstraints.keys;
-        const chosenOperation = operation != null ? operation : allowedOperations[Math.floor(Math.random() * allowedOperations.length)];
+        const allowedOperations = Array.from(difficultyLevelConstraints.keys());
+        const chosenOperation = operation ? operation : allowedOperations[Math.floor(Math.random() * allowedOperations.length)];
         const constraint = difficultyLevelConstraints.get(chosenOperation);
 
         let question = new MathQuestion();
