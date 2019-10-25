@@ -1,12 +1,13 @@
-<math-count-down [countFrom]="3"
-                 (countDownFinished)=startGame()
-                 *ngIf="showCountDown">
-</math-count-down>
-<p *ngIf="showCountUp">
-  {{ellapsedMillis | stopwatch}}
-</p>
-<math-question *ngIf="question"
-               [question]="question"
-               (questionAnswered)="questionAnswered()">
-</math-question>
-
+<div class="game-container">
+  <math-count-down [countFrom]="3"
+                   (countDownFinished)=startGame()
+                   *ngIf="showCountDown">
+  </math-count-down>
+  <p *ngIf="showCountUp">
+    {{ellapsedMillis | stopwatch}}
+  </p>
+  <math-question *ngIf="question"
+                 [question]="question"
+                 (questionAnswered)="questionAnswered()">
+  </math-question>
+</div>

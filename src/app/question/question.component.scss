@@ -1,10 +1,13 @@
 .question {
-    &-container {
-        display: inline-flex;
-        align-items: baseline;
-    }
+  &-container {
+    display: inline-flex;
+    align-items: baseline;
+  }
 
-    &-input {
-        width: 10em;
-    }
+  &-input {
+    width: 3.5rem;
+    text-align: center;
+    padding-left: 0.375rem;
+    padding-right: 0.375rem;
+  }
 }
