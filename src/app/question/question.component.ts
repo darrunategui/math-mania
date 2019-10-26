@@ -8,40 +8,28 @@ import { ArithmeticOperations, MathQuestion } from '../model';
   templateUrl: './question.component.html',
   styleUrls: ['./question.component.scss']
 })
-export class QuestionComponent implements OnInit, AfterViewInit {
+export class QuestionComponent implements AfterViewInit {
 
   @ViewChild('answerInput', { static: false }) inputBox !: ElementRef;
 
-  @Output() questionAnswered = new EventEmitter<void>();
+  @Output() questionAnswered = new EventEmitter<void>(true);
 
   @Input()
   get question() { return this._question; }
   set question(value: MathQuestion) {
     this._question = value;
-    this.inputAnswer = null;
+    this._inputAnswer = null;
   }
   private _question: MathQuestion = { leftOperand: NaN, rightOperand: NaN, operation: ArithmeticOperations.None, answer: NaN };
 
   get inputAnswer() { return this._inputAnswer; }
   set inputAnswer(value: number) {
     this._inputAnswer = value;
-    if (this._inputAnswer == this.question.answer) {
-      this.questionAnswered$.next();
+    if (this.isAnswerCorrect) {
+      this.questionAnswered.emit();
     }
   }
   private _inputAnswer: number;
-
-  private questionAnswered$ = new Subject<void>();
-
-  ngOnInit() {
-    // Since the event emitter is going to be triggered in the setter of inputAnswer,
-    // and this subsequently can trigger another setting on inputAnswer (clearing it)
-    // it's best to execute the event on an asap scheduler to give the inputAnswer setter
-    // the ability to finish executing
-    this.questionAnswered$.pipe(observeOn(animationFrameScheduler)).subscribe(() => {
-      this.questionAnswered.emit();
-    });
-  }
 
   ngAfterViewInit(): void {
     this.inputBox.nativeElement.focus();
@@ -54,5 +42,9 @@ export class QuestionComponent implements OnInit, AfterViewInit {
       case ArithmeticOperations.Addition: return '+';
       default: return '?';
     }
+  }
+
+  get isAnswerCorrect() {
+    return this.question && this.inputAnswer == this.question.answer;
   }
 }

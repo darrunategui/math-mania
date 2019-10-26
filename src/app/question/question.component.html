@@ -6,10 +6,12 @@
     <span>=</span>
   </p>
   <input type="text"
+         [ngClass]="{ 'answered': isAnswerCorrect }"
+         [readonly]="isAnswerCorrect"
          [(ngModel)]="inputAnswer"
          class="form-control question-input"
          inputmode="numeric"
          pattern="[0-9]*"
          digitOnly
-         #answerInput/>
+         #answerInput />
 </div>

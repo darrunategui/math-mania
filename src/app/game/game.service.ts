@@ -16,21 +16,21 @@ export class GameService {
         ],
         [
             DifficultyLevels.Medium, new Map([
-                [ArithmeticOperations.Multiplication, { leftOperandMin: 1, leftOperandMax: 4, rightOperandMin: 1, rightOperandMax: 4 }],
+                [ArithmeticOperations.Multiplication, { leftOperandMin: 3, leftOperandMax: 6, rightOperandMin: 3, rightOperandMax: 6 }],
                 [ArithmeticOperations.Subtraction, { leftOperandMin: 4, leftOperandMax: 8, rightOperandMin: 1, rightOperandMax: 5 }],
                 [ArithmeticOperations.Addition, { leftOperandMin: 1, leftOperandMax: 4, rightOperandMin: 1, rightOperandMax: 4 }],
             ])
         ],
         [
             DifficultyLevels.Hard, new Map([
-                [ArithmeticOperations.Multiplication, { leftOperandMin: 1, leftOperandMax: 4, rightOperandMin: 1, rightOperandMax: 4 }],
+                [ArithmeticOperations.Multiplication, { leftOperandMin: 6, leftOperandMax: 11, rightOperandMin: 6, rightOperandMax: 11 }],
                 [ArithmeticOperations.Subtraction, { leftOperandMin: 4, leftOperandMax: 8, rightOperandMin: 1, rightOperandMax: 5 }],
                 [ArithmeticOperations.Addition, { leftOperandMin: 1, leftOperandMax: 4, rightOperandMin: 1, rightOperandMax: 4 }],
             ])
         ],
         [
             DifficultyLevels.Impossible, new Map([
-                [ArithmeticOperations.Multiplication, { leftOperandMin: 1, leftOperandMax: 4, rightOperandMin: 1, rightOperandMax: 4 }],
+                [ArithmeticOperations.Multiplication, { leftOperandMin: 8, leftOperandMax: 15, rightOperandMin: 8, rightOperandMax: 15 }],
                 [ArithmeticOperations.Subtraction, { leftOperandMin: 4, leftOperandMax: 8, rightOperandMin: 1, rightOperandMax: 5 }],
                 [ArithmeticOperations.Addition, { leftOperandMin: 1, leftOperandMax: 4, rightOperandMin: 1, rightOperandMax: 4 }],
             ])

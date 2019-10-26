@@ -2,17 +2,16 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ArithmeticOperations, GameData, MathQuestion } from '../model';
 import { GameService } from './game.service';
-import { timer, Subject } from 'rxjs';
-import { takeUntil, finalize } from 'rxjs/operators';
+import { timer, Subject, pipe, Subscription } from 'rxjs';
+import { takeUntil, finalize, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'math-game',
   templateUrl: './game.component.html',
   styleUrls: ['./game.component.scss']
 })
-export class GameComponent implements OnInit {
+export class GameComponent {
 
-  gameData: GameData;
   question: MathQuestion;
   questionQueue: MathQuestion[] = [];
 
@@ -21,44 +20,49 @@ export class GameComponent implements OnInit {
   showCountUp = false;
 
   private startMillis: number;
-  private countUpCancelled$ = new Subject<void>();
+  private countUpSubscription: Subscription;
 
-
-
-  constructor(private route: ActivatedRoute, private gameService: GameService) {
-  }
-
-  ngOnInit() {
-    this.gameData = this.route.snapshot.data as GameData;
-  }
+  constructor(private route: ActivatedRoute, private gameService: GameService) { }
 
   startGame() {
-    this.questionQueue = Array(20).fill(null).map(() => this.gameService.getRandomQuestion(this.gameData.difficulty, ArithmeticOperations.Multiplication));
+    this.questionQueue = Array(5).fill(null).map(() => this.gameService.getRandomQuestion(this.gameData.difficulty, ArithmeticOperations.Multiplication));
     // show the proper counter
     this.showCountDown = false;
     this.showCountUp = true;
     // start the game
     this.generateQuestion();
     this.startMillis = Date.now();
-    this.recordEllapsedMillis();
-
-    // every 33ms record the ellapsed time
-    // 33ms since that still looks like it's real time in the UI
-    timer(0, 33)
-      .pipe(
-        takeUntil(this.countUpCancelled$),
-        finalize(() => this.recordEllapsedMillis())
-    ).subscribe(() => this.recordEllapsedMillis());
+    this.toggleCountUpTimer();
   }
 
   questionAnswered() {
     if (this.questionQueue.length == 0) {
       // finished the game!
-      this.countUpCancelled$.next();
+      this.toggleCountUpTimer();
     }
     else {
       // game is not done, generate another question
-      this.generateQuestion();
+      this.toggleCountUpTimer();
+      setTimeout(() => {
+        this.generateQuestion();
+        this.toggleCountUpTimer();
+      }, 700);
+    }
+  }
+
+  private toggleCountUpTimer() {
+    if (!this.countUpSubscription || this.countUpSubscription.closed) {
+      // every 33ms record the ellapsed time
+      // 33ms since that still looks like it's real time in the UI
+      this.recordEllapsedMillis();
+      this.countUpSubscription = timer(0, 33)
+        .pipe(
+          tap(() => this.recordEllapsedMillis()),
+          finalize(() => this.recordEllapsedMillis())
+        ).subscribe();
+    }
+    else {
+      this.countUpSubscription.unsubscribe();
     }
   }
 
@@ -68,5 +72,9 @@ export class GameComponent implements OnInit {
 
   private recordEllapsedMillis() {
     return this.ellapsedMillis = Date.now() - this.startMillis;
+  }
+
+  private get gameData() {
+    return this.route.snapshot.data as GameData;
   }
 }
