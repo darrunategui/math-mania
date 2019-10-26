@@ -10,13 +10,13 @@ import { takeUntil, finalize, tap } from 'rxjs/operators';
   templateUrl: './game.component.html',
   styleUrls: ['./game.component.scss']
 })
-export class GameComponent {
+export class GameComponent implements OnInit {
 
   question: MathQuestion;
   questionQueue: MathQuestion[] = [];
 
   ellapsedMillis: number;
-  showCountDown = true;
+  showCountDown = false;
   showCountUp = false;
 
   private startMillis: number;
@@ -24,7 +24,18 @@ export class GameComponent {
 
   constructor(private route: ActivatedRoute, private gameService: GameService) { }
 
+  ngOnInit() {
+    this.startGame();
+  }
+
   startGame() {
+    this.questionQueue = [];
+    this.question = null;
+    this.showCountDown = true;
+    this.showCountUp = false;
+  }
+
+  startQuestions() {
     this.questionQueue = Array(5).fill(null).map(() => this.gameService.getRandomQuestion(this.gameData.difficulty, ArithmeticOperations.Multiplication));
     // show the proper counter
     this.showCountDown = false;

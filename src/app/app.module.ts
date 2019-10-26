@@ -7,6 +7,7 @@ import { LevelChooserComponent } from './level-chooser/level-chooser.component';
 import { SharedModule } from './shared/shared.module';
 import { GameComponent } from './game/game.component';
 import { CountDownComponent } from './count-down/count-down.component';
+import { CreditsComponent } from './credits/credits.component';
 
 
 @NgModule({
@@ -15,7 +16,8 @@ import { CountDownComponent } from './count-down/count-down.component';
     QuestionComponent,
     LevelChooserComponent,
     GameComponent,
-    CountDownComponent
+    CountDownComponent,
+    CreditsComponent
   ],
   imports: [
     BrowserModule,

@@ -4,6 +4,7 @@ import { GameComponent } from './game/game.component';
 import { LevelChooserComponent } from './level-chooser/level-chooser.component';
 import { DifficultyLevels } from './model/difficulty-levels.enum';
 import { GameData } from './model';
+import { CreditsComponent } from './credits/credits.component';
 
 
 const routes: Routes = [
@@ -31,6 +32,10 @@ const routes: Routes = [
     path: 'game/impossible',
     component: GameComponent,
     data: <GameData>{ difficulty: DifficultyLevels.Impossible }
+  },
+  {
+    path: 'credits',
+    component: CreditsComponent
   },
   {
     path: '**',
