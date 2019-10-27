@@ -3,8 +3,8 @@
                    (countDownFinished)=startQuestions()
                    *ngIf="showCountDown">
   </math-count-down>
-  <p *ngIf="showCountUp">
-    {{ellapsedMillis | stopwatch}}
+  <p *ngIf="showStopwatch">
+    {{ellapsedMillis$ | async | stopwatch}}
   </p>
   <math-question *ngIf="question"
                  [question]="question"

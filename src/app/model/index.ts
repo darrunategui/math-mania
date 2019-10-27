@@ -1,5 +1,5 @@
 export * from './difficulty-levels.enum';
 export * from './game-data';
-export * from './arithmetic-operations.enum';
+export * from './math-operations.enum';
 export * from './difficulty-level-constraint';
 export * from './math-question';

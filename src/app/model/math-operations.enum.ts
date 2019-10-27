@@ -1,4 +1,4 @@
-export enum ArithmeticOperations {
+export enum MathOperations {
     None,
     Multiplication,
     Addition,

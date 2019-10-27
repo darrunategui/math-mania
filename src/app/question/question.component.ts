@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { asapScheduler, Subject, asyncScheduler, animationFrameScheduler } from 'rxjs';
 import { subscribeOn, observeOn } from 'rxjs/operators';
-import { ArithmeticOperations, MathQuestion } from '../model';
+import { MathOperations, MathQuestion } from '../model';
 
 @Component({
   selector: 'math-question',
@@ -20,7 +20,7 @@ export class QuestionComponent implements AfterViewInit {
     this._question = value;
     this._inputAnswer = null;
   }
-  private _question: MathQuestion = { leftOperand: NaN, rightOperand: NaN, operation: ArithmeticOperations.None, answer: NaN };
+  private _question: MathQuestion = { leftOperand: NaN, rightOperand: NaN, operation: MathOperations.None, answer: NaN };
 
   get inputAnswer() { return this._inputAnswer; }
   set inputAnswer(value: number) {
@@ -37,9 +37,9 @@ export class QuestionComponent implements AfterViewInit {
 
   get operationSymbol() {
     switch(this.question && this.question.operation) {
-      case ArithmeticOperations.Multiplication: return 'x';
-      case ArithmeticOperations.Subtraction: return '-';
-      case ArithmeticOperations.Addition: return '+';
+      case MathOperations.Multiplication: return 'x';
+      case MathOperations.Subtraction: return '-';
+      case MathOperations.Addition: return '+';
       default: return '?';
     }
   }
