@@ -3,3 +3,4 @@ export * from './game-data';
 export * from './math-operations.enum';
 export * from './difficulty-level-constraint';
 export * from './math-question';
+export * from './game-status.enum';

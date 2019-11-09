@@ -1,14 +1,21 @@
 import { Action, createReducer, on } from '@ngrx/store';
+import { MathQuestion, DifficultyLevels, GameStatus } from 'src/app/model';
 
 
 export const gameFeatureKey = 'game';
 
-export interface State {
-
+export interface GameState {
+  status: GameStatus,
+  question?: MathQuestion,
+  difficulty?: DifficultyLevels,
+  questionsQueue: MathQuestion[],
+  ellapsedTime: number
 }
 
-export const initialState: State = {
-
+export const initialState: GameState = {
+  status: GameStatus.NotStarted,
+  questionsQueue: [],
+  ellapsedTime: 0
 };
 
 const gameReducer = createReducer(
@@ -16,6 +23,6 @@ const gameReducer = createReducer(
 
 );
 
-export function reducer(state: State | undefined, action: Action) {
+export function reducer(state: GameState | undefined, action: Action) {
   return gameReducer(state, action);
 }
