@@ -1,9 +1,17 @@
 import { createAction, props } from '@ngrx/store';
-import { DifficultyLevels } from 'src/app/model';
+import { DifficultyLevels, MathQuestion } from 'src/app/model';
 
-export const selectDifficulty = createAction('[Game] Select Difficulty', props<{ data: DifficultyLevels }>());
+export const setDifficulty = createAction('[Game] Select Difficulty', props<{ 
+  difficulty: DifficultyLevels 
+}>());
+
 export const startGame = createAction('[Game] Start Game');
-//export const endGame = createAction('[Game] End Game');
 
-// TODO: what is props??
-export const answerQuestion = createAction('[Game] Answer Question', props<{ data: number }>());
+export const answerQuestion = createAction('[Game] Answer Question', props<{ 
+  answer: number 
+}>());
+
+export const answerQuestionSuccess = createAction('[Game] Answer Question Success', props<{
+  questionsLeft: MathQuestion[],
+  currentQuestion: MathQuestion
+}>());
