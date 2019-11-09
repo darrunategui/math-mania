@@ -1,4 +1,4 @@
-import { MathOperations } from '.';
+import { MathOperations } from './math-operations.enum';
 
 export class MathQuestion {
     leftOperand: number;
