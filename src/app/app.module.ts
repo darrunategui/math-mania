@@ -8,6 +8,10 @@ import { SharedModule } from './shared/shared.module';
 import { GameComponent } from './game/game.component';
 import { CountDownComponent } from './count-down/count-down.component';
 import { CreditsComponent } from './credits/credits.component';
+import { StoreModule } from '@ngrx/store';
+import { reducers, metaReducers } from './reducers';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { environment } from '../environments/environment';
 
 
 @NgModule({
@@ -22,7 +26,15 @@ import { CreditsComponent } from './credits/credits.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    SharedModule
+    SharedModule,
+    StoreModule.forRoot(reducers, {
+      metaReducers, 
+      runtimeChecks: {
+        strictStateImmutability: true,
+        strictActionImmutability: true,
+      }
+    }),
+    !environment.production ? StoreDevtoolsModule.instrument() : []
   ],
   providers: [],
   bootstrap: [AppComponent]
