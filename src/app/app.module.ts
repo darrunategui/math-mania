@@ -9,7 +9,7 @@ import { GameComponent } from './game/game.component';
 import { CountDownComponent } from './count-down/count-down.component';
 import { CreditsComponent } from './credits/credits.component';
 import { StoreModule } from '@ngrx/store';
-import { reducers, metaReducers } from './reducers';
+import { reducers, metaReducers } from './store/reducers';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 
