@@ -1,6 +1,6 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import { MathQuestion, DifficultyLevels, GameStatus } from 'src/app/model';
-import { setDifficulty } from '../actions/game.actions';
+import { setDifficulty, startGame, setEllapsedTime } from '../actions/game.actions';
 
 
 export const gameFeatureKey = 'game';
@@ -21,7 +21,9 @@ export const initialState: GameState = {
 
 const gameReducer = createReducer(
   initialState,
-  on(setDifficulty, (state, { difficulty }) => ({ ...state, difficulty: difficulty }))
+  on(setDifficulty, (state, { difficulty }) => ({ ...state, difficulty })),
+  on(startGame, (state) => ({ ...state, status: GameStatus.InProgress })),
+  on(setEllapsedTime, (state, { ellapsedTime }) => ({ ...state, ellapsedTime }))
 );
 
 export function reducer(state: GameState | undefined, action: Action) {

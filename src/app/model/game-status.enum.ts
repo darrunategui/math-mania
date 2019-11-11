@@ -1,6 +1,6 @@
 export enum GameStatus {
     NotStarted = 0,
-    Initializing = 1,
+    //Initializing = 1,
     InProgress = 2,
     Done = 4,
 

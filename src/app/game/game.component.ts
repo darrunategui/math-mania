@@ -4,6 +4,9 @@ import { Observable } from 'rxjs';
 import { GameData, MathOperations, MathQuestion } from '../model';
 import { MathQuestionsService } from '../shared/services/math-questions.service';
 import { StopwatchService } from '../shared/services/stopwatch.service';
+import { Store } from '@ngrx/store';
+import { AppState } from '../store/reducers';
+import * as GameActions from 'src/app/store/actions/game.actions';
 
 @Component({
   selector: 'math-game',
@@ -22,10 +25,13 @@ export class GameComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
     private questionsService: MathQuestionsService,
-    private stopwatch: StopwatchService
+    private stopwatch: StopwatchService,
+    private store: Store<AppState>
   ) { }
 
   ngOnInit() {
+    this.store.dispatch(GameActions.setDifficulty({ difficulty: this.gameData.difficulty }));
+    this.store.dispatch(GameActions.startGame());
     this.ellapsedMillis$ = this.stopwatch.getProgress$(33);
     this.startGame();
   }
