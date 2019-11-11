@@ -31,7 +31,6 @@ export class GameComponent implements OnInit {
 
   ngOnInit() {
     this.store.dispatch(GameActions.setDifficulty({ difficulty: this.gameData.difficulty }));
-    this.store.dispatch(GameActions.startGame());
     this.ellapsedMillis$ = this.stopwatch.getProgress$(33);
     this.startGame();
   }

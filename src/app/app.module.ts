@@ -14,6 +14,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 import { EffectsModule } from '@ngrx/effects';
 import { GameEffects } from './store/effects/game.effects';
+import { StopwatchService } from './shared/services/stopwatch.service';
 
 
 @NgModule({
@@ -39,7 +40,7 @@ import { GameEffects } from './store/effects/game.effects';
     !environment.production ? StoreDevtoolsModule.instrument() : [],
     EffectsModule.forRoot([GameEffects])
   ],
-  providers: [],
+  providers: [StopwatchService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

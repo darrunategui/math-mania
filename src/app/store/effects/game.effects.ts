@@ -26,18 +26,23 @@ export class GameEffects {
     )),
     mergeMap(([action, gameState]) => {
       if (!gameState.question || gameState.question.answer != action.answer) {
-        return of(GameActions.answerQuestionFail);
+        return of(action);
       }
       else {
         if (gameState.questionsQueue.length > 0) {
           const nextQuestion = gameState.questionsQueue[0];
           const questionsLeft = gameState.questionsQueue.slice(1);
-          return of(GameActions.answerQuestionSuccess({ questionsLeft, nextQuestion }));
+          return of(GameActions.setQuestions({ questionsLeft, nextQuestion }));
         }
         else {
-          return of(GameActions.endGameSuccess);
+          return of(GameActions.endGame);
         }
       }
     })
+  ));
+
+  endGame$ = createEffect(() => this.actions$.pipe(
+    ofType(GameActions.endGame),
+    tap(() => this.stopwatch.toggle())
   ));
 }
