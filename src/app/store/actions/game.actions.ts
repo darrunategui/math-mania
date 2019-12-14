@@ -20,8 +20,16 @@ export const answerQuestion = createAction(
   props<{ answer: number }>()
 );
 
+export const answerQuestionSuccess = createAction(
+  '[Game] Answer Question Success'
+);
+
+export const answerQuestionFail = createAction(
+  '[Game] Answer Questions Fail'
+);
+
 export const setQuestions = createAction(
-  '[Game] Answer Question Success',
+  '[Game] Set Questions',
   props<{ questionsLeft: MathQuestion[], nextQuestion: MathQuestion }>()
 );
 

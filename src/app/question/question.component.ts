@@ -2,6 +2,9 @@ import { Component, EventEmitter, Input, OnInit, Output, AfterViewInit, ViewChil
 import { asapScheduler, Subject, asyncScheduler, animationFrameScheduler } from 'rxjs';
 import { subscribeOn, observeOn } from 'rxjs/operators';
 import { MathOperations, MathQuestion } from '../model';
+import { AppState } from '../store/reducers';
+import { Store } from '@ngrx/store';
+import { answerQuestion } from '../store/actions/game.actions';
 
 @Component({
   selector: 'math-question',
@@ -25,11 +28,11 @@ export class QuestionComponent implements AfterViewInit {
   get inputAnswer() { return this._inputAnswer; }
   set inputAnswer(value: number) {
     this._inputAnswer = value;
-    if (this.isAnswerCorrect) {
-      this.questionAnswered.emit();
-    }
+    this.store.dispatch(answerQuestion({ answer: value }));
   }
   private _inputAnswer: number;
+
+  constructor(private store: Store<AppState>) {}
 
   ngAfterViewInit(): void {
     this.inputBox.nativeElement.focus();
@@ -42,9 +45,5 @@ export class QuestionComponent implements AfterViewInit {
       case MathOperations.Addition: return '+';
       default: return '?';
     }
-  }
-
-  get isAnswerCorrect() {
-    return this.question && this.inputAnswer == this.question.answer;
   }
 }

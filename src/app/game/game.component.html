@@ -6,9 +6,8 @@
   <p *ngIf="showStopwatch">
     {{ellapsedMillis$ | async | stopwatch}}
   </p>
-  <math-question *ngIf="question"
-                 [question]="question"
-                 (questionAnswered)="questionAnswered()">
+  <math-question *ngIf="question$ | async as question"
+                 [question]="question">
   </math-question>
   <button  (click)="startGame()">Play Again?</button>
 </div>
