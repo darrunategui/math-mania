@@ -1,6 +1,6 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { State, gameFeatureKey } from './state';
-import { RootState } from 'src/app/root-store';
+import { RootState } from '@mathmania/root-store';
 
 
 export const selectGame = createFeatureSelector<RootState, State>(gameFeatureKey);

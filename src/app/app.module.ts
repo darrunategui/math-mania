@@ -9,6 +9,7 @@ import { environment } from '../environments/environment';
 import { EffectsModule } from '@ngrx/effects';
 import { StopwatchService } from './core/services/stopwatch.service';
 import { GameModule } from './game/game.module';
+import { CoreModule } from './core/core.module';
 
 
 @NgModule({
@@ -19,6 +20,7 @@ import { GameModule } from './game/game.module';
   imports: [
     BrowserModule,
     AppRoutingModule,
+    CoreModule,
     GameModule,
     StoreModule.forRoot({}, {
       runtimeChecks: {
@@ -29,7 +31,7 @@ import { GameModule } from './game/game.module';
     !environment.production ? StoreDevtoolsModule.instrument() : [],
     EffectsModule.forRoot([])
   ],
-  providers: [StopwatchService],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

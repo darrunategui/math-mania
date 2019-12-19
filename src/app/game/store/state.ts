@@ -1,4 +1,4 @@
-import { GameStatus, MathQuestion, DifficultyLevels } from 'src/app/model';
+import { GameStatus, MathQuestion, DifficultyLevels } from '@mathmania/model';
 
 export const gameFeatureKey = 'game';
 

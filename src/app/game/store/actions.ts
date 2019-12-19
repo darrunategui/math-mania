@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { DifficultyLevels, MathQuestion } from 'src/app/model';
+import { DifficultyLevels, MathQuestion } from '@mathmania/model';
 
 export const setDifficulty = createAction(
   '[Game] Set Difficulty',
