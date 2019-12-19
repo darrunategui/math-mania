@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { asapScheduler, Subject, asyncScheduler, animationFrameScheduler } from 'rxjs';
 import { subscribeOn, observeOn } from 'rxjs/operators';
-import { MathOperations, MathQuestion } from '../model';
-import { AppState } from '../store/reducers';
+import { MathOperations, MathQuestion } from '../../model';
+import { AppState } from '../../store/reducers';
 import { Store } from '@ngrx/store';
-import { answerQuestion } from '../store/actions/game.actions';
+import { answerQuestion } from '../../store/actions/game.actions';
 
 @Component({
   selector: 'math-question',

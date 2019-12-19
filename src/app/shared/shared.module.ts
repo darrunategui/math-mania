@@ -4,11 +4,15 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { DigitOnlyModule } from '@uiowa/digit-only';
 import { RouterModule } from '@angular/router';
 import { StopwatchPipe } from './pipes/stopwatch.pipe';
+import { CountDownComponent } from './components/count-down/count-down.component';
 
 
 
 @NgModule({
-  declarations: [StopwatchPipe],
+  declarations: [
+    StopwatchPipe,
+    CountDownComponent
+  ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -22,7 +26,8 @@ import { StopwatchPipe } from './pipes/stopwatch.pipe';
     FormsModule,
     DigitOnlyModule,
     RouterModule,
-    StopwatchPipe
+    StopwatchPipe,
+    CountDownComponent
   ]
 })
 export class SharedModule { }

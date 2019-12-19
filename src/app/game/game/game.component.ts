@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { GameData, MathOperations, MathQuestion } from '../model';
-import { MathQuestionsService } from '../shared/services/math-questions.service';
-import { StopwatchService } from '../shared/services/stopwatch.service';
+import { GameData, MathOperations, MathQuestion } from '../../model';
+import { MathQuestionsService } from '../../core/services/math-questions.service';
+import { StopwatchService } from '../../core/services/stopwatch.service';
 import { Store } from '@ngrx/store';
-import { AppState } from '../store/reducers';
+import { AppState } from '../../store/reducers';
 import * as GameActions from 'src/app/store/actions/game.actions';
-import { selectEllapsedTime, selectQuestion, selectQuestionsLeft } from '../store/selectors/game.selectors';
+import { selectEllapsedTime, selectQuestion, selectQuestionsLeft } from '../../store/selectors/game.selectors';
 
 @Component({
   selector: 'math-game',

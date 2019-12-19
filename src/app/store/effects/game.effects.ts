@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../reducers';
-import { StopwatchService } from 'src/app/shared/services/stopwatch.service';
+import { StopwatchService } from 'src/app/core/services/stopwatch.service';
 import * as GameActions from '../actions/game.actions';
 import { tap, mergeMap, map, withLatestFrom, concatMap, switchMap } from 'rxjs/operators';
 import { selectGame } from '../selectors/game.selectors';
 import { of, merge } from 'rxjs';
-import { MathQuestionsService } from 'src/app/shared/services/math-questions.service';
+import { MathQuestionsService } from 'src/app/core/services/math-questions.service';
 import { MathOperations } from 'src/app/model';
 
 @Injectable()
