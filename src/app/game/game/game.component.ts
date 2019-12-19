@@ -1,13 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
-import { GameData, MathOperations, MathQuestion } from '../../model';
-import { MathQuestionsService } from '../../core/services/math-questions.service';
-import { StopwatchService } from '../../core/services/stopwatch.service';
 import { Store } from '@ngrx/store';
-import { AppState } from '../../store/reducers';
-import * as GameActions from 'src/app/store/actions/game.actions';
-import { selectEllapsedTime, selectQuestion, selectQuestionsLeft } from '../../store/selectors/game.selectors';
+import { GameActions, GameSelectors } from '../store';
+import { StopwatchService } from '../../core/services/stopwatch.service';
+import { GameData } from '../../model';
+import { AppState } from '../../root-store';
 
 @Component({
   selector: 'math-game',
@@ -17,12 +14,12 @@ import { selectEllapsedTime, selectQuestion, selectQuestionsLeft } from '../../s
 })
 export class GameComponent implements OnInit {
 
-  question$ = this.store.select(selectQuestion);
-  questionQueue$ = this.store.select(selectQuestionsLeft);
+  question$ = this.store.select(GameSelectors.selectQuestion);
+  questionQueue$ = this.store.select(GameSelectors.selectQuestionsLeft);
 
   showCountDown = false;
   showStopwatch = false;
-  ellapsedMillis$ = this.store.select(selectEllapsedTime);
+  ellapsedMillis$ = this.store.select(GameSelectors.selectEllapsedTime);
 
   constructor(private route: ActivatedRoute,
     private store: Store<AppState>

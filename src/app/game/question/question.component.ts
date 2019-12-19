@@ -1,10 +1,8 @@
-import { Component, EventEmitter, Input, OnInit, Output, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
-import { asapScheduler, Subject, asyncScheduler, animationFrameScheduler } from 'rxjs';
-import { subscribeOn, observeOn } from 'rxjs/operators';
-import { MathOperations, MathQuestion } from '../../model';
-import { AppState } from '../../store/reducers';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { answerQuestion } from '../../store/actions/game.actions';
+import { MathOperations, MathQuestion } from '../../model';
+import { AppState } from '../../root-store';
+import { GameActions } from '../store';
 
 @Component({
   selector: 'math-question',
@@ -28,7 +26,7 @@ export class QuestionComponent implements AfterViewInit {
   get inputAnswer() { return this._inputAnswer; }
   set inputAnswer(value: number) {
     this._inputAnswer = value;
-    this.store.dispatch(answerQuestion({ answer: value }));
+    this.store.dispatch(GameActions.answerQuestion({ answer: value }));
   }
   private _inputAnswer: number;
 

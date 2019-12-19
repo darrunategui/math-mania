@@ -1,25 +1,25 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { Store, select } from '@ngrx/store';
-import { AppState } from '../reducers';
-import { StopwatchService } from 'src/app/core/services/stopwatch.service';
-import * as GameActions from '../actions/game.actions';
-import { tap, mergeMap, map, withLatestFrom, concatMap, switchMap } from 'rxjs/operators';
-import { selectGame } from '../selectors/game.selectors';
-import { of, merge } from 'rxjs';
+import { select, Store } from '@ngrx/store';
+import { merge, of } from 'rxjs';
+import { concatMap, map, mergeMap, tap, withLatestFrom } from 'rxjs/operators';
 import { MathQuestionsService } from 'src/app/core/services/math-questions.service';
+import { StopwatchService } from 'src/app/core/services/stopwatch.service';
 import { MathOperations } from 'src/app/model';
+import { startGame, setQuestions, setEllapsedTime, answerQuestion, answerQuestionFail, answerQuestionSuccess, endGame } from './actions';
+import { selectGame } from './selectors';
+import { State } from './state';
 
 @Injectable()
 export class GameEffects {
   constructor(private actions$: Actions, 
-    private store$: Store<AppState>, 
+    private store$: Store<State>, 
     private stopwatch: StopwatchService,
     private questionsService: MathQuestionsService) {
   }
 
   startStopwatch$ = createEffect(() => this.actions$.pipe(
-    ofType(GameActions.startGame),
+    ofType(startGame),
     concatMap(action => of(action).pipe(
       withLatestFrom(this.store$.pipe(select(selectGame)))
     )),
@@ -32,32 +32,32 @@ export class GameEffects {
       const size = 5;// TODO: change to 20 or depending on difficulty
       let questions = Array(size).fill(null).map(() => this.questionsService.getRandomQuestion(gameState.difficulty, MathOperations.Multiplication));
       
-      const setQuestionsAction = of(GameActions.setQuestions({ questionsLeft: questions.slice(1), nextQuestion: questions[0] })).pipe(
+      const setQuestionsAction = of(setQuestions({ questionsLeft: questions.slice(1), nextQuestion: questions[0] })).pipe(
         tap(() => this.stopwatch.toggle())
       );
-      const stopWatchAction = this.stopwatch.getProgress$(33).pipe(map(ellapsedTime => GameActions.setEllapsedTime({ ellapsedTime })));
+      const stopWatchAction = this.stopwatch.getProgress$(33).pipe(map(ellapsedTime => setEllapsedTime({ ellapsedTime })));
 
       return merge(setQuestionsAction, stopWatchAction);
     })
   ));
 
   checkAnswer$ = createEffect(() => this.actions$.pipe(
-    ofType(GameActions.answerQuestion),
+    ofType(answerQuestion),
     concatMap(action => of(action).pipe(
       withLatestFrom(this.store$.pipe(select(selectGame)))
     )),
     map(([action, gameState]) => {
       if (!gameState.question || gameState.question.answer != action.answer) {
-        return GameActions.answerQuestionFail();
+        return answerQuestionFail();
       }
       else {
-        return GameActions.answerQuestionSuccess();
+        return answerQuestionSuccess();
       }
     })
   ));
 
   answerCorrect$ = createEffect(() => this.actions$.pipe(
-    ofType(GameActions.answerQuestionSuccess),
+    ofType(answerQuestionSuccess),
     concatMap(action => of(action).pipe(
       withLatestFrom(this.store$.pipe(select(selectGame)))
     )),
@@ -65,16 +65,16 @@ export class GameEffects {
       if (gameState.questionsQueue.length > 0) {
         const nextQuestion = gameState.questionsQueue[0];
         const questionsLeft = gameState.questionsQueue.slice(1);
-        return GameActions.setQuestions({ questionsLeft, nextQuestion });
+        return setQuestions({ questionsLeft, nextQuestion });
       }
       else {
-        return GameActions.endGame();
+        return endGame();
       }
     })
   ));
 
   endGame$ = createEffect(() => this.actions$.pipe(
-    ofType(GameActions.endGame),
+    ofType(endGame),
     tap(() => this.stopwatch.toggle())
   ), { dispatch: false });
 }
