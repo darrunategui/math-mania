@@ -4,7 +4,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CreditsComponent } from './credits/credits.component';
 import { StoreModule } from '@ngrx/store';
-import { metaReducers } from './root-store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 import { EffectsModule } from '@ngrx/effects';
@@ -22,7 +21,6 @@ import { GameModule } from './game/game.module';
     AppRoutingModule,
     GameModule,
     StoreModule.forRoot({}, {
-      metaReducers,
       runtimeChecks: {
         strictStateImmutability: true,
         strictActionImmutability: true,

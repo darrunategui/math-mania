@@ -8,12 +8,12 @@ import { StopwatchService } from 'src/app/core/services/stopwatch.service';
 import { MathOperations } from 'src/app/model';
 import { startGame, setQuestions, setEllapsedTime, answerQuestion, answerQuestionFail, answerQuestionSuccess, endGame } from './actions';
 import { selectGame } from './selectors';
-import { State } from './state';
+import { RootState } from 'src/app/root-store';
 
 @Injectable()
 export class GameEffects {
   constructor(private actions$: Actions, 
-    private store$: Store<State>, 
+    private store$: Store<RootState>, 
     private stopwatch: StopwatchService,
     private questionsService: MathQuestionsService) {
   }

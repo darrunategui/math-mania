@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { GameActions, GameSelectors } from '../store';
 import { StopwatchService } from '../../core/services/stopwatch.service';
 import { GameData } from '../../model';
-import { AppState } from '../../root-store';
+import { RootState } from '../../root-store';
 
 @Component({
   selector: 'math-game',
@@ -22,7 +22,7 @@ export class GameComponent implements OnInit {
   ellapsedMillis$ = this.store.select(GameSelectors.selectEllapsedTime);
 
   constructor(private route: ActivatedRoute,
-    private store: Store<AppState>
+    private store: Store<RootState>
   ) { }
 
   ngOnInit() {

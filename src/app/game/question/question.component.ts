@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { MathOperations, MathQuestion } from '../../model';
-import { AppState } from '../../root-store';
+import { RootState } from '../../root-store';
 import { GameActions } from '../store';
 
 @Component({
@@ -30,7 +30,7 @@ export class QuestionComponent implements AfterViewInit {
   }
   private _inputAnswer: number;
 
-  constructor(private store: Store<AppState>) {}
+  constructor(private store: Store<RootState>) {}
 
   ngAfterViewInit(): void {
     this.inputBox.nativeElement.focus();
