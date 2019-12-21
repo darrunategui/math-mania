@@ -5,9 +5,8 @@ import { map } from 'rxjs/operators';
 @Injectable()
 export class StopwatchService implements OnDestroy {
 
-  get ellapsedTime() {
-    return this.counter || 0;
-  }
+  get ellapsedTime() { return this.counter || 0; }
+  get isRunning() { return this.running; }
 
   private counter: number;
   private timerRef;

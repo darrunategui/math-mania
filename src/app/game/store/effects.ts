@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
+import { MathQuestionsService } from '@mathmania/core/services/math-questions.service';
+import { StopwatchService } from '@mathmania/core/services/stopwatch.service';
+import { MathOperations } from '@mathmania/model';
+import { RootState } from '@mathmania/root-store';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { select, Store } from '@ngrx/store';
-import { merge, of } from 'rxjs';
-import { concatMap, map, mergeMap, tap, withLatestFrom } from 'rxjs/operators';
-import { MathQuestionsService } from '@mathmania/core/services/math-questions.service';
-import { MathOperations } from '@mathmania/model';
-import { startGame, setQuestions, setEllapsedTime, answerQuestion, answerQuestionFail, answerQuestionSuccess, endGame } from './actions';
+import { merge, of, Subject } from 'rxjs';
+import { concatMap, filter, map, mergeMap, takeUntil, tap, withLatestFrom } from 'rxjs/operators';
+import { answerQuestion, endGame, resetGame, setEllapsedTime, setQuestions, startGame } from './actions';
 import { selectGame } from './selectors';
-import { RootState } from '@mathmania/root-store';
-import { StopwatchService } from '@mathmania/core/services/stopwatch.service';
 
 @Injectable()
 export class GameEffects {
@@ -18,6 +18,7 @@ export class GameEffects {
     private questionsService: MathQuestionsService) {
   }
 
+  private stopwatchCancelled$ = new Subject<void>();
   startStopwatch$ = createEffect(() => this.actions$.pipe(
     ofType(startGame),
     concatMap(action => of(action).pipe(
@@ -35,7 +36,7 @@ export class GameEffects {
       const setQuestionsAction = of(setQuestions({ questionsLeft: questions.slice(1), nextQuestion: questions[0] })).pipe(
         tap(() => this.stopwatch.toggle())
       );
-      const stopWatchAction = this.stopwatch.getProgress$(33).pipe(map(ellapsedTime => setEllapsedTime({ ellapsedTime })));
+      const stopWatchAction = this.stopwatch.getProgress$(33).pipe(takeUntil(this.stopwatchCancelled$), map(ellapsedTime => setEllapsedTime({ ellapsedTime })));
 
       return merge(setQuestionsAction, stopWatchAction);
     })
@@ -46,28 +47,16 @@ export class GameEffects {
     concatMap(action => of(action).pipe(
       withLatestFrom(this.store$.pipe(select(selectGame)))
     )),
-    map(([action, gameState]) => {
-      if (!gameState.question || gameState.question.answer != action.answer) {
-        return answerQuestionFail();
-      }
-      else {
-        return answerQuestionSuccess();
-      }
-    })
-  ));
-
-  answerCorrect$ = createEffect(() => this.actions$.pipe(
-    ofType(answerQuestionSuccess),
-    concatMap(action => of(action).pipe(
-      withLatestFrom(this.store$.pipe(select(selectGame)))
-    )),
+    filter(([action, gameState]) => gameState.question && gameState.question.answer == action.answer),
     map(([action, gameState]) => {
       if (gameState.questionsQueue.length > 0) {
+        // set up the next questions
         const nextQuestion = gameState.questionsQueue[0];
         const questionsLeft = gameState.questionsQueue.slice(1);
         return setQuestions({ questionsLeft, nextQuestion });
       }
       else {
+        // all questions have been answered. End the game
         return endGame();
       }
     })
@@ -75,6 +64,27 @@ export class GameEffects {
 
   endGame$ = createEffect(() => this.actions$.pipe(
     ofType(endGame),
-    tap(() => this.stopwatch.toggle())
-  ), { dispatch: false });
+    map(() => {
+      this.stopwatchCancelled$.next();
+      if (this.stopwatch.isRunning) {
+        this.stopwatch.toggle();
+      }
+      return setEllapsedTime({ ellapsedTime: this.stopwatch.ellapsedTime });
+    })
+  ));
+
+  resetGame$ = createEffect(() => this.actions$.pipe(
+    ofType(resetGame),
+    filter(() => this.stopwatch.isRunning || this.stopwatch.ellapsedTime !== 0),
+    tap(() => {
+      if (this.stopwatch.isRunning) {
+        this.stopwatchCancelled$.next();
+        this.stopwatch.reset();
+      }
+    })
+  )/* the same action may be dispatched but will be handled differently the second time
+    * since the stopwatch will have been reset. This ensures the game state will be fully
+    * reset the next time the game is started.
+    */
+  );
 }

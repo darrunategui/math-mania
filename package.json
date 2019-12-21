@@ -23,7 +23,6 @@
     "@ngrx/entity": "^8.5.0",
     "@ngrx/store": "^8.5.0",
     "@ngrx/store-devtools": "^8.5.0",
-    "@uiowa/digit-only": "^1.2.1",
     "bootstrap": "^4.3.1",
     "jquery": "^3.3.1",
     "rxjs": "~6.4.0",

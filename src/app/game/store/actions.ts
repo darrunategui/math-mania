@@ -20,14 +20,6 @@ export const answerQuestion = createAction(
   props<{ answer: number }>()
 );
 
-export const answerQuestionSuccess = createAction(
-  '[Game] Answer Question Success'
-);
-
-export const answerQuestionFail = createAction(
-  '[Game] Answer Questions Fail'
-);
-
 export const setQuestions = createAction(
   '[Game] Set Questions',
   props<{ questionsLeft: MathQuestion[], nextQuestion: MathQuestion }>()
@@ -35,4 +27,8 @@ export const setQuestions = createAction(
 
 export const endGame = createAction(
   '[Game] End Game Success'
+);
+
+export const resetGame = createAction(
+  '[Game] Reset Game'
 );
