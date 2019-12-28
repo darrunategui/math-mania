@@ -47,7 +47,6 @@ export class GameEffects {
     concatMap(action => of(action).pipe(
       withLatestFrom(this.store$.pipe(select(selectGame)))
     )),
-    // todo might need to filter here to ensure the effect isn't run again when the next question is delayed
     filter(([action, gameState]) => (gameState.status & GameStatus.InProgress) && !(gameState.status & GameStatus.AnswerCorrect) && gameState.question && gameState.question.answer == action.answer),
     mergeMap(([action, gameState]) => {
       if (gameState.questionsQueue.length > 0) {
