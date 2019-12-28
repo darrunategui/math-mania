@@ -1,0 +1,26 @@
+.sidenav-container {
+  height: 100%;
+}
+
+.sidenav {
+  width: 200px;
+}
+
+.hidden {
+  display: none;
+}
+
+.main-toolbar {
+  //position: sticky;
+  //top: 0;
+  //z-index: 1;
+
+  background-color: #124559;
+  color: white;
+
+}
+
+.side-toolbar {
+  background-color: #124559;
+  color: white;
+}

@@ -10,6 +10,9 @@ import { EffectsModule } from '@ngrx/effects';
 import { StopwatchService } from './core/services/stopwatch.service';
 import { GameModule } from './game/game.module';
 import { CoreModule } from './core/core.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { SharedModule } from './shared/shared.module';
+
 
 
 @NgModule({
@@ -21,6 +24,7 @@ import { CoreModule } from './core/core.module';
     BrowserModule,
     AppRoutingModule,
     CoreModule,
+    SharedModule,
     GameModule,
     StoreModule.forRoot({}, {
       runtimeChecks: {
@@ -29,7 +33,8 @@ import { CoreModule } from './core/core.module';
       }
     }),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
-    EffectsModule.forRoot([])
+    EffectsModule.forRoot([]),
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
