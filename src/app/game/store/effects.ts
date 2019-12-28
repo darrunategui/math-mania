@@ -89,10 +89,8 @@ export class GameEffects {
     ofType(resetGame),
     filter(() => this.stopwatch.isRunning || this.stopwatch.ellapsedTime !== 0),
     tap(() => {
-      if (this.stopwatch.isRunning) {
-        this.stopwatchCancelled$.next();
-        this.stopwatch.reset();
-      }
+      this.stopwatchCancelled$.next();
+      this.stopwatch.reset();
     })
   )/* the same action may be dispatched but will be handled differently the second time
     * since the stopwatch will have been reset. This ensures the game state will be fully

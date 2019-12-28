@@ -1,16 +1,16 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { timer } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { timer, Subject } from 'rxjs';
+import { map, takeUntil } from 'rxjs/operators';
 
 @Injectable()
 export class StopwatchService implements OnDestroy {
 
-  get ellapsedTime() { return this.counter || 0; }
+  get ellapsedTime() { return this.counter; }
   get isRunning() { return this.running; }
 
-  private counter: number;
-  private timerRef;
+  private counter: number = 0;
   private running: boolean = false;
+  private stopped$ = new Subject<void>();
 
   getProgress$(interval: number) {
     return timer(0, interval).pipe(map(x => this.ellapsedTime));
@@ -19,23 +19,24 @@ export class StopwatchService implements OnDestroy {
   toggle() {
     this.running = !this.running;
     if (this.running) {
-      const startTime = Date.now() - (this.counter || 0);
-      this.timerRef = setInterval(() => {
+      const startTime = Date.now() - this.counter;
+      timer(0, 1).pipe(takeUntil(this.stopped$)).subscribe(() => {
         this.counter = Date.now() - startTime;
       });
     } else {
-      clearInterval(this.timerRef);
+      this.stopped$.next();
     }
   }
 
   reset() {
-    this.running = false;
-    this.counter = undefined;
-    clearInterval(this.timerRef);
+    if (this.running) {
+      this.toggle();
+    }
+    this.counter = 0;
   }
 
   ngOnDestroy() {
-    clearInterval(this.timerRef);
+    this.reset();
   }
 
 }
