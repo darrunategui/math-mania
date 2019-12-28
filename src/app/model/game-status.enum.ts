@@ -5,4 +5,5 @@ export enum GameStatus {
     Done = 4,
 
     // TODO: question answered flag? to indicate correct answer but timer is paused
+    AnswerCorrect = 8
 }

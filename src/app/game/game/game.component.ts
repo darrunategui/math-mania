@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { GameActions, GameSelectors } from '../store';
 import { StopwatchService } from '../../core/services/stopwatch.service';
 import { GameData } from '../../model';
 import { RootState } from '../../root-store';
+import { observeOn } from 'rxjs/operators';
+import { animationFrameScheduler } from 'rxjs';
 
 @Component({
   selector: 'math-game',
@@ -12,10 +14,8 @@ import { RootState } from '../../root-store';
   styleUrls: ['./game.component.scss'],
   providers: [StopwatchService]
 })
-export class GameComponent implements OnInit {
-
-  question$ = this.store.select(GameSelectors.selectQuestion);
-  questionQueue$ = this.store.select(GameSelectors.selectQuestionsLeft);
+export class GameComponent implements OnInit, OnDestroy {
+  question$ = this.store.select(GameSelectors.selectQuestion).pipe(observeOn(animationFrameScheduler));
 
   showCountDown = false;
   showStopwatch = false;
@@ -45,5 +45,9 @@ export class GameComponent implements OnInit {
 
   private get gameData() {
     return this.route.snapshot.data as GameData;
+  }
+
+  ngOnDestroy(): void {
+    this.store.dispatch(GameActions.resetGame());
   }
 }

@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { MathQuestionsService } from '@mathmania/core/services/math-questions.service';
 import { StopwatchService } from '@mathmania/core/services/stopwatch.service';
-import { MathOperations } from '@mathmania/model';
+import { MathOperations, GameStatus } from '@mathmania/model';
 import { RootState } from '@mathmania/root-store';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { select, Store } from '@ngrx/store';
 import { merge, of, Subject } from 'rxjs';
-import { concatMap, filter, map, mergeMap, takeUntil, tap, withLatestFrom } from 'rxjs/operators';
-import { answerQuestion, endGame, resetGame, setEllapsedTime, setQuestions, startGame } from './actions';
+import { concatMap, filter, map, mergeMap, takeUntil, tap, withLatestFrom, delay, switchMap } from 'rxjs/operators';
+import { answerQuestion, endGame, resetGame, setEllapsedTime, setQuestions, startGame, setStatus } from './actions';
 import { selectGame } from './selectors';
 
 @Injectable()
@@ -47,17 +47,30 @@ export class GameEffects {
     concatMap(action => of(action).pipe(
       withLatestFrom(this.store$.pipe(select(selectGame)))
     )),
-    filter(([action, gameState]) => gameState.question && gameState.question.answer == action.answer),
-    map(([action, gameState]) => {
+    // todo might need to filter here to ensure the effect isn't run again when the next question is delayed
+    filter(([action, gameState]) => (gameState.status & GameStatus.InProgress) && !(gameState.status & GameStatus.AnswerCorrect) && gameState.question && gameState.question.answer == action.answer),
+    mergeMap(([action, gameState]) => {
       if (gameState.questionsQueue.length > 0) {
         // set up the next questions
         const nextQuestion = gameState.questionsQueue[0];
         const questionsLeft = gameState.questionsQueue.slice(1);
-        return setQuestions({ questionsLeft, nextQuestion });
+
+        this.stopwatch.toggle();
+        // set the temperary status showing the answer was corrects
+        const setState1Action = of(setStatus({ status: gameState.status | GameStatus.AnswerCorrect }));
+        // after a quick delay set the next question
+        const setQuestionsAction = of(setQuestions({ questionsLeft, nextQuestion })).pipe(delay(1000));
+        // chaining on the previous observable, set the status back and trigger the stopwatch
+        const setState2Action = setQuestionsAction.pipe(
+          map(() => setStatus({ status: gameState.status & ~GameStatus.AnswerCorrect })),
+          tap(() => this.stopwatch.toggle())
+        );
+
+        return merge(setState1Action, setQuestionsAction, setState2Action);
       }
       else {
         // all questions have been answered. End the game
-        return endGame();
+        return of(endGame());
       }
     })
   ));

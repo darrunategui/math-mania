@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { DifficultyLevels, MathQuestion } from '@mathmania/model';
+import { DifficultyLevels, MathQuestion, GameStatus } from '@mathmania/model';
 
 export const setDifficulty = createAction(
   '[Game] Set Difficulty',
@@ -20,13 +20,18 @@ export const answerQuestion = createAction(
   props<{ answer: number }>()
 );
 
+export const setStatus = createAction(
+  '[Game] Set Status',
+  props<{ status: GameStatus }>()
+);
+
 export const setQuestions = createAction(
   '[Game] Set Questions',
   props<{ questionsLeft: MathQuestion[], nextQuestion: MathQuestion }>()
 );
 
 export const endGame = createAction(
-  '[Game] End Game Success'
+  '[Game] End Game'
 );
 
 export const resetGame = createAction(
