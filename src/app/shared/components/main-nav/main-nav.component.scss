@@ -18,6 +18,15 @@
   background-color: #124559;
   color: white;
 
+  button {
+    height: 100%;
+
+    &:active,&:focus {
+      outline: none;
+      //outline-color: white;
+    }
+  }
+
 }
 
 .side-toolbar {
