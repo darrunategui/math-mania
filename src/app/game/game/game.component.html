@@ -1,0 +1,13 @@
+<div class="game-container">
+  <math-count-down *ngIf="showCountDown"
+                   [countFrom]="3"
+                   (countDownFinished)="startQuestions()">
+  </math-count-down>
+  <p *ngIf="showStopwatch">
+    {{ellapsedMillis$ | async | stopwatch}}
+  </p>
+  <math-question *ngIf="question$ | async as question"
+                 [question]="question">
+  </math-question>
+  <button mat-button (click)="reset()" *ngIf="isDone$ | async">Play Again?</button>
+</div>
