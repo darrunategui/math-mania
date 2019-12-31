@@ -3,9 +3,9 @@ import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { GameActions, GameSelectors } from '../store';
 import { StopwatchService } from '../../core/services/stopwatch.service';
-import { GameData } from '../../model';
+import { GameData, GameStatus } from '../../model';
 import { RootState } from '../../root-store';
-import { observeOn } from 'rxjs/operators';
+import { observeOn, map } from 'rxjs/operators';
 import { animationFrameScheduler } from 'rxjs';
 
 @Component({
@@ -16,10 +16,13 @@ import { animationFrameScheduler } from 'rxjs';
 })
 export class GameComponent implements OnInit, OnDestroy {
   question$ = this.store.select(GameSelectors.selectQuestion).pipe(observeOn(animationFrameScheduler));
+  isDone$ = this.store.select(GameSelectors.selectStatus).pipe(map(x => x === GameStatus.Done));
 
   showCountDown = false;
   showStopwatch = false;
   ellapsedMillis$ = this.store.select(GameSelectors.selectEllapsedTime);
+
+  private get gameData() { return this.route.snapshot.data as GameData; }
 
   constructor(private route: ActivatedRoute,
     private store: Store<RootState>
@@ -27,13 +30,8 @@ export class GameComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.store.dispatch(GameActions.setDifficulty({ difficulty: this.gameData.difficulty }));
-    this.startGame();
-  }
-
-  startGame() {
     this.showCountDown = true;
     this.showStopwatch = false;
-    // startQuestions will be fired when the count down expires
   }
 
   startQuestions() {
@@ -43,8 +41,9 @@ export class GameComponent implements OnInit, OnDestroy {
     this.showStopwatch = true;
   }
 
-  private get gameData() {
-    return this.route.snapshot.data as GameData;
+  reset() {
+    this.store.dispatch(GameActions.resetGame());
+    this.ngOnInit();
   }
 
   ngOnDestroy(): void {
