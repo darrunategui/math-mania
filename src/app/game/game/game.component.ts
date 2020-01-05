@@ -17,6 +17,7 @@ import { GameActions, GameSelectors } from '../store';
 export class GameComponent implements OnInit, OnDestroy {
   question$ = this.store.select(GameSelectors.selectQuestion).pipe(observeOn(animationFrameScheduler));
   isDone$ = this.store.select(GameSelectors.selectStatus).pipe(map(x => x === GameStatus.Done));
+  isAnswerCorrect$ = this.store.select(GameSelectors.selectStatus).pipe(map(status => status & GameStatus.AnswerCorrect));
 
   showCountDown = false;
   showStopwatch = false;

@@ -9,5 +9,6 @@
   <math-question *ngIf="question$ | async as question"
                  [question]="question">
   </math-question>
+  <img class="success-baby" src="assets/images/success-baby.png" *ngIf="(isAnswerCorrect$ | async) && !(isDone$ | async)" />
   <button mat-button (click)="reset()" *ngIf="isDone$ | async">Play Again?</button>
 </div>
