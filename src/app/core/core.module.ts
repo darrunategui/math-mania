@@ -1,14 +1,32 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { StopwatchService } from './services/stopwatch.service';
-import { RootStoreModule } from './store/root-store.module';
+import { RootStoreModule } from './store';
+import { MainNavComponent } from './components/main-nav/main-nav.component';
+import { SharedModule } from '@mathmania/shared/shared.module';
+
+const coreModules = [
+  BrowserModule,
+  BrowserAnimationsModule,
+  RootStoreModule
+];
+
+const coreComponents = [
+  MainNavComponent
+];
 
 @NgModule({
   declarations: [
+    ...coreComponents
   ],
   imports: [
-    CommonModule,
-    RootStoreModule
+    ...coreModules,
+    SharedModule
+  ],
+  exports: [
+    ...coreModules,
+    ...coreComponents
   ],
   providers: [
     StopwatchService

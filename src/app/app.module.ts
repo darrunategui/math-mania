@@ -1,11 +1,8 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
 import { CreditsComponent } from './credits/credits.component';
-import { SharedModule } from './shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -13,11 +10,8 @@ import { SharedModule } from './shared/shared.module';
     CreditsComponent
   ],
   imports: [
-    BrowserModule,
     AppRoutingModule,
-    CoreModule,
-    SharedModule,
-    BrowserAnimationsModule
+    CoreModule
   ],
   providers: [],
   bootstrap: [AppComponent]
