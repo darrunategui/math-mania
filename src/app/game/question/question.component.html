@@ -6,8 +6,8 @@
     <span>=</span>
   </p>
   <input type="text"
-         [ngClass]="{ 'answered': isAnswerCorrect }"
-         [readonly]="isAnswerCorrect"
+         [ngClass]="{ 'answered': isAnswerCorrect$ | async }"
+         [readonly]="isAnswerCorrect$ | async"
          [(ngModel)]="inputAnswer"
          class="form-control question-input"
          inputmode="numeric"

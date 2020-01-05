@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { MathQuestionsService } from '@mathmania/core/services/math-questions.service';
 import { StopwatchService } from '@mathmania/core/services/stopwatch.service';
 import { MathOperations, GameStatus } from '@mathmania/model';
-import { RootState } from '@mathmania/root-store';
+import { RootState } from '@mathmania/core/store';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { select, Store } from '@ngrx/store';
 import { merge, of, Subject } from 'rxjs';

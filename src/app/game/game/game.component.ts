@@ -1,12 +1,12 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { RootState } from '@mathmania/core/store';
 import { Store } from '@ngrx/store';
-import { GameActions, GameSelectors } from '../store';
+import { animationFrameScheduler } from 'rxjs';
+import { map, observeOn } from 'rxjs/operators';
 import { StopwatchService } from '../../core/services/stopwatch.service';
 import { GameData, GameStatus } from '../../model';
-import { RootState } from '../../root-store';
-import { observeOn, map } from 'rxjs/operators';
-import { animationFrameScheduler } from 'rxjs';
+import { GameActions, GameSelectors } from '../store';
 
 @Component({
   selector: 'math-game',

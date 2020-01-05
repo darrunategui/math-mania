@@ -1,8 +1,9 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { RootState } from '@mathmania/core/store';
 import { Store } from '@ngrx/store';
-import { MathOperations, MathQuestion } from '../../model';
-import { RootState } from '../../root-store';
-import { GameActions } from '../store';
+import { MathOperations, MathQuestion, GameStatus } from '../../model';
+import { GameActions, GameSelectors } from '../store';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'math-question',
@@ -29,6 +30,8 @@ export class QuestionComponent implements AfterViewInit {
     this.store.dispatch(GameActions.answerQuestion({ answer: value }));
   }
   private _inputAnswer: number;
+
+  isAnswerCorrect$ = this.store.select(GameSelectors.selectStatus).pipe(map(status => status & GameStatus.AnswerCorrect));
 
   constructor(private store: Store<RootState>) {}
 
