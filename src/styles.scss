@@ -2,3 +2,12 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+// Ensures the component under the nav bar takes up the remaining space
+.main-container {
+  > router-outlet + * {
+    flex: 1 1 auto;
+  }
+
+}
