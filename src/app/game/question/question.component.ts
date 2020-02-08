@@ -12,7 +12,7 @@ import { map } from 'rxjs/operators';
 })
 export class QuestionComponent implements AfterViewInit {
 
-  @ViewChild('answerInput', { static: false }) inputBox !: ElementRef;
+  @ViewChild('answerInput') inputBox !: ElementRef;
 
   @Output() questionAnswered = new EventEmitter<void>(true);
 
