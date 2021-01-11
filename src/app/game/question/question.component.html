@@ -10,8 +10,7 @@
          [readonly]="isAnswerCorrect$ | async"
          [(ngModel)]="inputAnswer"
          class="form-control question-input"
-         inputmode="numeric"
-         pattern="[0-9]*"
-         digitOnly
+         inputmode="decimal"
+         numericOnly
          #answerInput />
 </div>
