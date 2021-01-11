@@ -12,9 +12,7 @@ import { map } from 'rxjs/operators';
 })
 export class QuestionComponent implements AfterViewInit {
 
-  @ViewChild('answerInput') inputBox !: ElementRef;
-
-  @Output() questionAnswered = new EventEmitter<void>(true);
+  @ViewChild('answerInput') inputBox!: ElementRef;
 
   @Input()
   get question() { return this._question; }
@@ -22,14 +20,14 @@ export class QuestionComponent implements AfterViewInit {
     this._question = value;
     this._inputAnswer = null;
   }
-  private _question: MathQuestion = { leftOperand: NaN, rightOperand: NaN, operation: MathOperations.None, answer: NaN };
+  private _question!: MathQuestion;
 
-  get inputAnswer() { return this._inputAnswer; }
+  get inputAnswer() { return this._inputAnswer || NaN; }
   set inputAnswer(value: number) {
     this._inputAnswer = value;
     this.store.dispatch(GameActions.answerQuestion({ answer: value }));
   }
-  private _inputAnswer: number;
+  private _inputAnswer: number | null = null;
 
   isAnswerCorrect$ = this.store.select(GameSelectors.selectStatus).pipe(map(status => status & GameStatus.AnswerCorrect));
 

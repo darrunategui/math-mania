@@ -38,16 +38,16 @@ export class MathQuestionsService {
   ]);
 
   getRandomQuestion(difficulty: DifficultyLevels, operation?: MathOperations) {
-    const difficultyLevelConstraints = this.difficultyLevels.get(difficulty);
+    const difficultyLevelConstraints = this.difficultyLevels.get(difficulty)!;
     const allowedOperations = Array.from(difficultyLevelConstraints.keys());
     const chosenOperation = operation ? operation : allowedOperations[Math.floor(Math.random() * allowedOperations.length)];
-    const constraint = difficultyLevelConstraints.get(chosenOperation);
+    const constraint = difficultyLevelConstraints.get(chosenOperation)!;
 
-    let question = new MathQuestion();
-    question.leftOperand = this.getRandomNumber(constraint.leftOperandMin, constraint.leftOperandMax);
-    question.rightOperand = this.getRandomNumber(constraint.rightOperandMin, constraint.rightOperandMax);
-    question.operation = chosenOperation;
-    return question;
+    return new MathQuestion(
+      this.getRandomNumber(constraint.leftOperandMin, constraint.leftOperandMax), // left operand
+      this.getRandomNumber(constraint.rightOperandMin, constraint.rightOperandMax), // right operand
+      chosenOperation
+    );
   }
   private getRandomNumber(min: number, max: number) {
     return Math.floor(Math.random() * (max - min + 1)) + min;

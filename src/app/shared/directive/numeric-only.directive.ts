@@ -7,12 +7,7 @@ import { takeUntil, pairwise, startWith } from 'rxjs/operators';
 @Directive({
   selector: '[numericOnly]'
 })
-export class NumericOnlyDirective implements OnDestroy {
-
-  private formControl: AbstractControl;
-  private oldValue: string;
-  private decimalCounter = 0;
-  private destroyed$ = new Subject<void>();
+export class NumericOnlyDirective {
   private navigationKeys = [
     'Backspace',
     'Delete',
@@ -27,9 +22,9 @@ export class NumericOnlyDirective implements OnDestroy {
     'Copy',
     'Paste'
   ];
-  @Input() allowDecimal?= true;
-  @Input() allowNegative?= true;
-  @Input() decimalSeparator?= '.';
+  @Input() allowDecimal: boolean = true;
+  @Input() allowNegative: boolean = true;
+  @Input() decimalSeparator: string = '.';
 
   constructor(private el: ElementRef, private control: NgControl) {
     // this.formControl = this.control.control;
@@ -42,10 +37,6 @@ export class NumericOnlyDirective implements OnDestroy {
     //   this.oldValue = newValue == null ? null : prevValue
     //   console.log(`prev: ${prevValue}, new: ${newValue}`);
     // });
-  }
-  ngOnDestroy(): void {
-    this.destroyed$.next();
-    this.destroyed$.complete();
   }
 
   @HostListener('keydown', ['$event'])
@@ -75,20 +66,25 @@ export class NumericOnlyDirective implements OnDestroy {
 
   @HostListener('paste', ['$event'])
   onPaste(event: ClipboardEvent) {
-    const pastedInput: string = event.clipboardData.getData('text/plain');
+    const pastedInput = event.clipboardData?.getData('text/plain');
 
     this.pasteText(pastedInput, event);
   }
 
   @HostListener('drop', ['$event'])
   onDrop(event: DragEvent) {
-    const textData = event.dataTransfer.getData('text');
+    const textData = event.dataTransfer?.getData('text');
     this.el.nativeElement.focus();
 
     this.pasteText(textData, event);
   }
 
-  private pasteText(input: string, event: Event) {
+  private pasteText(input: string | undefined, event: Event) {
+    if (!input) {
+      event.preventDefault();
+      return;
+    }
+
     if (!this.allowDecimal || (this.hasDecimalPoint && input.includes(this.decimalSeparator))) {
       // strip the decimal point from the input
       input = input.replace(/\./g, '');
@@ -116,9 +112,9 @@ export class NumericOnlyDirective implements OnDestroy {
     event.preventDefault();
   }
 
-  private isANumber(text) {
+  private isANumber(text: string) {
     // https://stackoverflow.com/questions/175739/built-in-way-in-javascript-to-check-if-a-string-is-a-valid-number
-    return !isNaN(text) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
+    return !isNaN(+text) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
       !isNaN(parseFloat(text)) // ...and ensure strings of whitespace fail
   }
   get nativeElementValue() {

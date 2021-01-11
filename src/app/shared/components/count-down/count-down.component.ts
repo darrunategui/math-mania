@@ -9,12 +9,10 @@ import { take, map, switchMap, tap, finalize, flatMap } from 'rxjs/operators';
 })
 export class CountDownComponent implements OnInit {
 
-  @Input() countFrom: number;
+  @Input() countFrom!: number;
   @Output() countDownFinished = new EventEmitter<void>();
 
-  countDown$: Observable<number>;
-
-  constructor() { }
+  countDown$!: Observable<number>;
 
   ngOnInit() {
     this.countDown$ = merge(

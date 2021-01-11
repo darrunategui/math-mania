@@ -29,9 +29,10 @@ export class GameEffects {
         // the difficulty needs to be set first
         throw action.type + ' can not be called before difficulty has been set';
       }
+      const difficulty = gameState.difficulty;
 
       const size = 5;// TODO: change to 20 or depending on difficulty
-      let questions = Array(size).fill(null).map(() => this.questionsService.getRandomQuestion(gameState.difficulty, MathOperations.Multiplication));
+      let questions = Array(size).fill(null).map(() => this.questionsService.getRandomQuestion(difficulty, MathOperations.Multiplication));
 
       const setQuestionsAction = of(setQuestions({ questionsLeft: questions.slice(1), nextQuestion: questions[0] })).pipe(
         tap(() => this.stopwatch.toggle())
@@ -47,7 +48,7 @@ export class GameEffects {
     concatMap(action => of(action).pipe(
       withLatestFrom(this.store$.pipe(select(selectGame)))
     )),
-    filter(([action, gameState]) => (gameState.status & GameStatus.InProgress) && !(gameState.status & GameStatus.AnswerCorrect) && gameState.question && gameState.question.answer == action.answer),
+    filter(([action, gameState]) => !!(gameState.status & GameStatus.InProgress) && !(gameState.status & GameStatus.AnswerCorrect) && !!gameState.question && gameState.question.answer == action.answer),
     mergeMap(([action, gameState]) => {
       if (gameState.questionsQueue.length > 0) {
         // set up the next questions
